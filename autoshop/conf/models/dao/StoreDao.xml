@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="models.dao.StoreDao">
+    <insert id="create">
+        INSERT INTO public.store (brand_name, model_name, year_created, milage, price)
+        VALUES (#{arg0}, #{arg1}, #{arg2}, #{arg3}, #{arg4})
+    </insert>
+
+    <select id="show" resultType="models.dto.StoreDto">
+        SELECT * FROM store WHERE model_name = #{model_name}
+    </select>
+
+    <select id="all" resultType="models.dto.StoreDto">
+        SELECT * FROM store ORDER BY brand_name
+    </select>
+
+    <update id="update">
+        UPDATE store SET year_created = #{arg2}, milage = #{arg3}, price = #{arg4}
+        WHERE brand_name = #{arg0} and model_name = #{arg1}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM store WHERE model_name = #{model_name}
+    </delete>
+</mapper>
+

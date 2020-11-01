@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="models.dao.ModelDao">
+    <insert id="create">
+        INSERT INTO model (name, yearStart, yearEnd)
+        VALUES (#{arg0}, #{arg1}, #{arg2})
+    </insert>
+
+    <select id="show" resultType="models.dto.ModelDto">
+        SELECT * FROM model WHERE name = #{name}
+    </select>
+
+    <select id="all" resultType="models.dto.ModelDto">
+        SELECT * FROM model ORDER BY name
+    </select>
+
+    <update id="update">
+        UPDATE model SET yearStart = #{arg1}, yearEnd = #{arg2} WHERE name = #{arg0}
+    </update>
+
+    <delete id="delete">
+        DELETE from model WHERE NAME = #{name}
+    </delete>
+</mapper>
+
