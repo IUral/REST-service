@@ -20,7 +20,7 @@ public class ModelController extends Controller {
     public Result create(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
-            String name = json.get("name").asText();
+            String name = json.get("name").asText().toLowerCase();
             Integer yearStart = Integer.parseInt(json.get("yearStart").asText());
             Integer yearEnd = Integer.parseInt(json.get("yearEnd").asText());
             modelService.create(name, yearStart, yearEnd);
@@ -30,7 +30,7 @@ public class ModelController extends Controller {
     }
 
     public Result show(String name) {
-        return ok(Json.toJson(modelService.show(name)));
+        return ok(Json.toJson(modelService.show(name.toLowerCase())));
     }
 
     public Result all() {
@@ -41,7 +41,7 @@ public class ModelController extends Controller {
     public Result update(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
-            String name = json.get("name").asText();
+            String name = json.get("name").asText().toLowerCase();
             Integer yearStart = Integer.parseInt(json.get("yearStart").asText());
             Integer yearEnd = Integer.parseInt(json.get("yearEnd").asText());
             modelService.update(name, yearStart, yearEnd);
@@ -51,7 +51,7 @@ public class ModelController extends Controller {
     }
 
     public Result delete(String name) {
-        modelService.delete(name);
+        modelService.delete(name.toLowerCase());
         return ok("DELETE Model - OK");
     }
 

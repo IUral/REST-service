@@ -20,8 +20,8 @@ public class StoreController extends Controller {
     public Result create(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
-            String brandName = json.get("brand_name").asText();
-            String modelName = json.get("model_name").asText();
+            String brandName = json.get("brand_name").asText().toLowerCase();
+            String modelName = json.get("model_name").asText().toLowerCase();
             Integer yearCreated = Integer.parseInt(json.get("year_created").asText());
             Integer milage = Integer.parseInt(json.get("milage").asText());
             Integer price = Integer.parseInt(json.get("price").asText());
@@ -32,7 +32,7 @@ public class StoreController extends Controller {
     }
 
     public Result show(String modelName) {
-        JsonNode result = Json.toJson(storeService.show(modelName));
+        JsonNode result = Json.toJson(storeService.show(modelName.toLowerCase()));
         if(result != null) {
             return ok(result);
         }
@@ -47,8 +47,8 @@ public class StoreController extends Controller {
     public Result update(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
-            String brandName = json.get("brand_name").asText();
-            String modelName = json.get("model_name").asText();
+            String brandName = json.get("brand_name").asText().toLowerCase();
+            String modelName = json.get("model_name").asText().toLowerCase();
             Integer yearCreated = Integer.parseInt(json.get("year_created").asText());
             Integer milage = Integer.parseInt(json.get("milage").asText());
             Integer price = Integer.parseInt(json.get("price").asText());
@@ -59,7 +59,7 @@ public class StoreController extends Controller {
     }
 
     public Result delete(String name) {
-        storeService.delete(name);
+        storeService.delete(name.toLowerCase());
         return ok("DELETE Model - OK");
     }
 

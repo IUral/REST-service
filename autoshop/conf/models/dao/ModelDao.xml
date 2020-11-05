@@ -10,19 +10,21 @@
     </insert>
 
     <select id="show" resultType="models.dto.ModelDto">
-        SELECT * FROM model WHERE name = #{name}
+        SELECT lower(name) as "name", yearStart, yearEnd
+        FROM model WHERE lower(name) = #{name}
     </select>
 
     <select id="all" resultType="models.dto.ModelDto">
-        SELECT * FROM model ORDER BY name
+        SELECT lower(name) as "name", yearStart, yearEnd
+        FROM model ORDER BY name
     </select>
 
     <update id="update">
-        UPDATE model SET yearStart = #{arg1}, yearEnd = #{arg2} WHERE name = #{arg0}
+        UPDATE model SET yearStart = #{arg1}, yearEnd = #{arg2} WHERE lower(name) = #{arg0}
     </update>
 
     <delete id="delete">
-        DELETE from model WHERE NAME = #{name}
+        DELETE from model WHERE lower(name) = #{name}
     </delete>
 </mapper>
 

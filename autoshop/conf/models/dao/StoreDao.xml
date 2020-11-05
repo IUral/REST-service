@@ -5,25 +5,27 @@
 
 <mapper namespace="models.dao.StoreDao">
     <insert id="create">
-        INSERT INTO public.store (brand_name, model_name, year_created, milage, price)
+        INSERT INTO store (brand_name, model_name, year_created, milage, price)
         VALUES (#{arg0}, #{arg1}, #{arg2}, #{arg3}, #{arg4})
     </insert>
 
     <select id="show" resultType="models.dto.StoreDto">
-        SELECT * FROM store WHERE model_name = #{model_name}
+        SELECT lower(brand_name) as "brand_name", lower(model_name) as "model_name", year_created, milage, price
+        FROM store WHERE lower(model_name) = #{model_name}
     </select>
 
     <select id="all" resultType="models.dto.StoreDto">
-        SELECT * FROM store ORDER BY brand_name
+        SELECT lower(brand_name) as "brand_name", lower(model_name) as "model_name", year_created, milage, price
+        FROM store ORDER BY brand_name
     </select>
 
     <update id="update">
         UPDATE store SET year_created = #{arg2}, milage = #{arg3}, price = #{arg4}
-        WHERE brand_name = #{arg0} and model_name = #{arg1}
+        WHERE lower(brand_name) = #{arg0} and lower(model_name) = #{arg1}
     </update>
 
     <delete id="delete">
-        DELETE FROM store WHERE model_name = #{model_name}
+        DELETE FROM store WHERE lower(model_name) = #{model_name}
     </delete>
 </mapper>
 

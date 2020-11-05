@@ -26,8 +26,8 @@ public class BrandController extends Controller {
     public Result create(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
-            String name = json.get("name").asText();
-            String country = json.get("country").asText();
+            String name = json.get("name").asText().toLowerCase();
+            String country = json.get("country").asText().toLowerCase();
             brandService.create(name, country);
             return ok(  "CREATE OK");
         }
@@ -35,7 +35,7 @@ public class BrandController extends Controller {
     }
 
     public Result show(String name) {
-        return ok(Json.toJson(brandService.show(name)));
+        return ok(Json.toJson(brandService.show(name.toLowerCase())));
     }
 
     public Result all() {
@@ -46,8 +46,8 @@ public class BrandController extends Controller {
     public Result update(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
-            String name = json.get("name").asText();
-            String country = json.get("country").asText();
+            String name = json.get("name").asText().toLowerCase();
+            String country = json.get("country").asText().toLowerCase();
             brandService.update(name, country);
             return ok(  "UPDATE OK");
         }
@@ -55,7 +55,7 @@ public class BrandController extends Controller {
     }
 
     public Result delete(String name) {
-        brandService.delete(name);
+        brandService.delete(name.toLowerCase());
         return ok("DELETE OK");
     }
 

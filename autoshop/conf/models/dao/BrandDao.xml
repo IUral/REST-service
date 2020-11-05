@@ -10,18 +10,18 @@
     </insert>
 
     <select id="show" resultType="models.dto.BrandDto">
-        SELECT * FROM brand WHERE name = #{name}
+        SELECT lower(name) as "name", lower(country) as "country" FROM brand WHERE lower(name) = #{name}
     </select>
 
     <select id="all" resultType="models.dto.BrandDto">
-        SELECT * FROM brand ORDER BY name
+        SELECT lower(name) as "name", lower(country) as "country" FROM brand ORDER BY name
     </select>
 
     <update id="update">
-        UPDATE brand SET country = #{arg1} WHERE name = #{arg0}
+        UPDATE brand SET country = #{arg1} WHERE lower(name) = #{arg0}
     </update>
 
     <delete id="delete">
-        DELETE from BRAND WHERE NAME = #{name}
+        DELETE from brand WHERE lower(name) = #{name}
     </delete>
 </mapper>
