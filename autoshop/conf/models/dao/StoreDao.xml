@@ -10,13 +10,13 @@
     </insert>
 
     <select id="show" resultType="models.dto.StoreDto">
-        SELECT lower(brand_name) as "brand_name", lower(model_name) as "model_name", year_created, milage, price
+        SELECT id, lower(brand_name) as "brand_name", lower(model_name) as "model_name", year_created, milage, price
         FROM store WHERE lower(model_name) = #{model_name}
     </select>
 
     <select id="all" resultType="models.dto.StoreDto">
-        SELECT lower(brand_name) as "brand_name", lower(model_name) as "model_name", year_created, milage, price
-        FROM store ORDER BY brand_name
+        SELECT id, lower(brand_name) as "brand_name", lower(model_name) as "model_name", year_created, milage, price
+        FROM store ORDER BY id
     </select>
 
     <update id="update">

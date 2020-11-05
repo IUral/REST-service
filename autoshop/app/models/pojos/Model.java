@@ -2,6 +2,7 @@ package models.pojos;
 
 public class Model {
 
+    private Integer id;
     private String name;
     private Integer yearStart;
     private Integer yearEnd;
@@ -10,6 +11,14 @@ public class Model {
         this.name = name;
         this.yearStart = yearStart;
         this.yearEnd = yearEnd;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

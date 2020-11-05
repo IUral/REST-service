@@ -10,11 +10,11 @@
     </insert>
 
     <select id="show" resultType="models.dto.BrandDto">
-        SELECT lower(name) as "name", lower(country) as "country" FROM brand WHERE lower(name) = #{name}
+        SELECT id, lower(name) as "name", lower(country) as "country" FROM brand WHERE lower(name) = #{name}
     </select>
 
     <select id="all" resultType="models.dto.BrandDto">
-        SELECT lower(name) as "name", lower(country) as "country" FROM brand ORDER BY name
+        SELECT id, lower(name) as "name", lower(country) as "country" FROM brand ORDER BY id
     </select>
 
     <update id="update">

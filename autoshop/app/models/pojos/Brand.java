@@ -2,12 +2,21 @@ package models.pojos;
 
 public class Brand {
 
+    private Integer id;
     private String name;
     private String country;
 
     public Brand(String name, String country) {
         this.name = name;
         this.country = country;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {

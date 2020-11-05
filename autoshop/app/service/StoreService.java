@@ -27,8 +27,8 @@ public class StoreService {
         return storeDao.all();
     }
 
-    public void update(String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
-        storeDao.update(brand_name, model_name, year_created, milage, price);
+    public void update(Integer id, String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
+        storeDao.update(id, brand_name, model_name, year_created, milage, price);
     }
 
     public void delete(String name) {

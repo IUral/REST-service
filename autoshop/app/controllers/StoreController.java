@@ -47,12 +47,13 @@ public class StoreController extends Controller {
     public Result update(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
+            Integer id = json.get("id").asInt();
             String brandName = json.get("brand_name").asText().toLowerCase();
             String modelName = json.get("model_name").asText().toLowerCase();
             Integer yearCreated = Integer.parseInt(json.get("year_created").asText());
             Integer milage = Integer.parseInt(json.get("milage").asText());
             Integer price = Integer.parseInt(json.get("price").asText());
-            storeService.update(brandName, modelName, yearCreated, milage, price);
+            storeService.update(id, brandName, modelName, yearCreated, milage, price);
             return ok(  "UPDATE Model - OK");
         }
         return ok("NO");

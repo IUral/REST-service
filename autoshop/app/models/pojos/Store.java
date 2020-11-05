@@ -3,6 +3,7 @@ package models.pojos;
 
 public class Store {
 
+    private Integer id;
     private String brand_name;
     private String model_name;
     private Integer year_created;
@@ -15,6 +16,14 @@ public class Store {
         this.year_created = year_created;
         this.milage = milage;
         this.price = price;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getModel_name() {
@@ -33,11 +42,11 @@ public class Store {
         this.brand_name = brand_name;
     }
 
-    public Integer getYearCreate() {
+    public Integer getYear_created() {
         return year_created;
     }
 
-    public void setYearCreate(Integer year_created) {
+    public void setYear_created(Integer year_created) {
         this.year_created = year_created;
     }
 

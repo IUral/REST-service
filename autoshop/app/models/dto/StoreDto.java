@@ -2,6 +2,7 @@ package models.dto;
 
 
 public class StoreDto {
+    public Integer id;
     public String brand_name;
     public String model_name;
     public Integer year_created;
