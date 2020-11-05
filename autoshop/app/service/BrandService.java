@@ -8,8 +8,12 @@ import java.util.List;
 
 public class BrandService {
 
+    private final BrandDao brandDao;
+
     @Inject
-    private BrandDao brandDao;
+    public BrandService(BrandDao brandDao) {
+        this.brandDao = brandDao;
+    }
 
     public void create(String name, String country) {
         brandDao.create(name, country);

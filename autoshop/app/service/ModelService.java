@@ -8,8 +8,12 @@ import java.util.List;
 
 public class ModelService {
 
+    private final ModelDao modelDao;
+
     @Inject
-    private ModelDao modelDao;
+    public ModelService(ModelDao modelDao) {
+        this.modelDao = modelDao;
+    }
 
     public void create(String name, Integer yearStart, Integer yearEnd) {
         modelDao.create(name, yearStart, yearEnd);

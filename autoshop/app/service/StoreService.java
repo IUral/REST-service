@@ -8,8 +8,12 @@ import java.util.List;
 
 public class StoreService {
 
+    private final StoreDao storeDao;
+
     @Inject
-    private StoreDao storeDao;
+    public StoreService(StoreDao storeDao) {
+        this.storeDao = storeDao;
+    }
 
     public void create(String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
         storeDao.create(brand_name, model_name, year_created, milage, price);
