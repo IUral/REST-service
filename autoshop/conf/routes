@@ -2,7 +2,7 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET      /                         controllers.HomeController.index()
+GET      /                        controllers.HomeController.index()
 # Controller Brand
 GET     /brands                   @controllers.BrandController.all()
 GET     /brands/:name             @controllers.BrandController.show(name: String)
@@ -17,12 +17,12 @@ POST    /models                   @controllers.ModelController.create(request: R
 DELETE  /models/:name             @controllers.ModelController.delete(name: String)
 PUT     /models                   @controllers.ModelController.update(request: Request)
 
-# Controller Model
-GET     /store                   @controllers.StoreController.all()
-GET     /store/:model_name       @controllers.StoreController.show(model_name: String)
-POST    /store                   @controllers.StoreController.create(request: Request)
-DELETE  /store/:model_name       @controllers.StoreController.delete(model_name: String)
-PUT     /store                   @controllers.StoreController.update(request: Request)
+# Controller Stor
+GET     /store/all                @controllers.StoreController.all()
+GET     /store                    @controllers.StoreController.show(country ?= "kor")
+POST    /store                    @controllers.StoreController.create(request: Request)
+DELETE  /store/:model_name        @controllers.StoreController.delete(model_name: String)
+PUT     /store                    @controllers.StoreController.update(request: Request)
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file             controllers.Assets.versioned(path="/public", file: Asset)

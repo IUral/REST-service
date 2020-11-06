@@ -1,6 +1,7 @@
 package service;
 
 import models.dao.StoreDao;
+import models.dto.BrandDto;
 import models.dto.StoreDto;
 import javax.inject.Inject;
 import java.util.List;
@@ -19,8 +20,8 @@ public class StoreService {
         storeDao.create(brand_name, model_name, year_created, milage, price);
     }
 
-    public List<StoreDto> show(String model_name) {
-        return storeDao.show(model_name);
+    public List<StoreDto> show(String country) {
+        return storeDao.show(country);
     }
 
     public List<StoreDto> all() {
