@@ -6,7 +6,8 @@ public class Brand {
     private String name;
     private String country;
 
-    public Brand(String name, String country) {
+    public Brand(Integer id, String name, String country) {
+        this.id = id;
         this.name = name;
         this.country = country;
     }

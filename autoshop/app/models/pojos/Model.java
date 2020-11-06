@@ -7,7 +7,8 @@ public class Model {
     private Integer yearStart;
     private Integer yearEnd;
 
-    public Model(String name, Integer yearStart, Integer yearEnd) {
+    public Model(Integer id, String name, Integer yearStart, Integer yearEnd) {
+        this.id = id;
         this.name = name;
         this.yearStart = yearStart;
         this.yearEnd = yearEnd;

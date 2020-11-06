@@ -10,7 +10,8 @@ public class Store {
     private Integer milage;
     private Integer price;
 
-    public Store(String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
+    public Store(Integer id, String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
+        this.id = id;
         this.brand_name = brand_name;
         this.model_name = model_name;
         this.year_created = year_created;
