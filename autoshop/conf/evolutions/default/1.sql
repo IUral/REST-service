@@ -4,25 +4,25 @@
 CREATE TABLE brand
 (
     id integer NOT NULL auto_increment,
-    name character varying(50) NOT NULL,
+    name varchar(50) NOT NULL,
     country character varying(50) NOT NULL,
-    PRIMARY KEY (name)
+    PRIMARY KEY (id, name)
 );
 
 CREATE TABLE model
 (
     id integer NOT NULL auto_increment,
-    name character varying(50) NOT NULL,
+    name varchar(50) NOT NULL,
     yearStart integer NOT NULL,
     yearEnd integer NOT NULL,
-    PRIMARY KEY (name)
+    PRIMARY KEY (id, name)
 );
 
 CREATE TABLE store
 (
     id integer NOT NULL auto_increment,
-    brand_name character varying(50) NOT NULL REFERENCES public.brand,
-    model_name character varying(50) NOT NULL REFERENCES public.model,
+    brand_name varchar(50) NOT NULL,
+    model_name varchar(50) NOT NULL,
     year_created integer NOT NULL,
     milage integer NOT NULL,
     price integer NOT NULL,
