@@ -1,7 +1,6 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import models.dto.BrandDto;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -11,7 +10,6 @@ import models.dto.StoreDto;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
 
 public class StoreController extends Controller {
@@ -33,8 +31,8 @@ public class StoreController extends Controller {
         return badRequest("Oopsss! record was not created ");
     }
 
-    public Result show(String brandName) {
-        List<StoreDto> result = storeService.show(brandName.toLowerCase());
+    public Result show(String country) {
+        List<StoreDto> result = storeService.show(country.toLowerCase());
         return ok(Json.toJson(result));
     }
 
