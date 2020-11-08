@@ -1,38 +1,51 @@
 package service;
 
 import models.dao.StoreDao;
-import models.dto.BrandDto;
 import models.dto.StoreDto;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 
 public class StoreService {
 
+    private final DatabaseExecutionContext databaseExecutionContext;
+
     private final StoreDao storeDao;
 
     @Inject
-    public StoreService(StoreDao storeDao) {
+    public StoreService(final StoreDao storeDao, final DatabaseExecutionContext datavaseExecutionContext) {
         this.storeDao = storeDao;
+        this.databaseExecutionContext = datavaseExecutionContext;
     }
 
-    public void create(String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
-        storeDao.create(brand_name, model_name, year_created, milage, price);
+    public CompletionStage<String> create(String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
+        return CompletableFuture.supplyAsync(() -> {
+            storeDao.create(brand_name, model_name, year_created, milage, price);
+            return "Was created record into Store";
+        }, databaseExecutionContext);
     }
 
-    public List<StoreDto> show(String country) {
-        return storeDao.show(country);
+    public CompletionStage<List<StoreDto>> show(String country) {
+        return CompletableFuture.supplyAsync(() -> storeDao.show(country), databaseExecutionContext);
     }
 
-    public List<StoreDto> all() {
-        return storeDao.all();
+    public CompletionStage<List<StoreDto>> all() {
+        return CompletableFuture.supplyAsync(() -> storeDao.all(), databaseExecutionContext);
     }
 
-    public void update(Integer id, String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
-        storeDao.update(id, brand_name, model_name, year_created, milage, price);
+    public CompletionStage<String> update(Integer id, String brand_name, String model_name, Integer year_created, Integer milage, Integer price) {
+        return CompletableFuture.supplyAsync(() -> {
+            storeDao.update(id, brand_name, model_name, year_created, milage, price);
+            return "Was update record Store";
+        }, databaseExecutionContext);
     }
 
-    public void delete(String name) {
-        storeDao.delete(name);
+    public CompletionStage<String> delete(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+            storeDao.delete(name);
+            return "Was delete record Store";
+        }, databaseExecutionContext);
     }
 }

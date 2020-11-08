@@ -6,6 +6,7 @@ version := "1.0-SNAPSHOT"
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
 scalaVersion := "2.13.3"
+val AkkaVersion = "2.6.10"
 
 libraryDependencies ++= Seq(
   guice,
@@ -15,7 +16,8 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.192",
   "org.mybatis" % "mybatis" % "3.4.1",
   "org.mybatis" % "mybatis-guice" % "3.6",
-  "com.google.inject.extensions" % "guice-multibindings" % "4.0"
+  "com.google.inject.extensions" % "guice-multibindings" % "4.0",
+  "com.typesafe.akka" %% "akka-actor" % AkkaVersion
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the

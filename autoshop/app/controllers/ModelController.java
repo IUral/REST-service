@@ -1,58 +1,67 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.concurrent.HttpExecutionContext;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import service.ModelService;
-import models.dto.ModelDto;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 
 public class ModelController extends Controller {
 
+    // получения исполнителя для текущего контекста HTTP
+    private final HttpExecutionContext httpExecutionContext;
+
+    private final ModelService modelService;
+
     @Inject
-    private ModelService modelService;
+    public ModelController(HttpExecutionContext httpExecutionContext, ModelService modelService) {
+        this.httpExecutionContext = httpExecutionContext;
+        this.modelService = modelService;
+    }
 
-    public Result create(Http.Request request) {
+    public CompletionStage<Result> create(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
             String name = json.get("name").asText().toLowerCase();
             Integer yearStart = Integer.parseInt(json.get("yearStart").asText());
             Integer yearEnd = Integer.parseInt(json.get("yearEnd").asText());
-            modelService.create(name, yearStart, yearEnd);
-            return ok(  "CREATE Model OK");
+            return modelService.create(name, yearStart, yearEnd)
+                    .thenApplyAsync(model -> ok(model), httpExecutionContext.current());
         }
-        return ok("NO CREATE");
+        return CompletableFuture.completedFuture(badRequest("Was NOT created record into Model"));
     }
 
-    public Result show(String name) {
-        return ok(Json.toJson(modelService.show(name.toLowerCase())));
+    public CompletionStage<Result> show(String name) {
+        return modelService.show(name.toLowerCase())
+                .thenApplyAsync(model -> ok(Json.toJson(model)), httpExecutionContext.current());
     }
 
-    public Result all() {
-        List<ModelDto> result = modelService.all();
-        return ok(Json.toJson(result));
+    public CompletionStage<Result> all() {
+        return modelService.all().thenApplyAsync(modelDtos -> ok(Json.toJson(modelDtos)), httpExecutionContext.current());
     }
 
-    public Result update(Http.Request request) {
+    public CompletionStage<Result> update(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
             String name = json.get("name").asText().toLowerCase();
             Integer yearStart = Integer.parseInt(json.get("yearStart").asText());
             Integer yearEnd = Integer.parseInt(json.get("yearEnd").asText());
-            modelService.update(name, yearStart, yearEnd);
-            return ok(  "UPDATE Model - OK");
+            return modelService.update(name, yearStart, yearEnd)
+                    .thenApplyAsync(model -> ok(model), httpExecutionContext.current());
         }
-        return ok("NO");
+        return CompletableFuture.completedFuture(badRequest("Was NOT updated record into Model"));
     }
 
-    public Result delete(String name) {
-        modelService.delete(name.toLowerCase());
-        return ok("DELETE Model - OK");
+    public CompletionStage<Result> delete(String name) {
+        return modelService.delete(name.toLowerCase())
+                .thenApplyAsync(model -> ok(model), httpExecutionContext.current());
     }
 
 }

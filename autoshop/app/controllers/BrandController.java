@@ -1,13 +1,7 @@
 package controllers;
 
-import akka.NotUsed;
-import akka.stream.javadsl.Source;
-import akka.util.ByteString;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import models.dto.BrandDto;
-import org.mybatis.guice.transactional.Transactional;
-import play.core.j.HttpExecutionContext;
+import play.libs.concurrent.HttpExecutionContext;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -15,70 +9,59 @@ import play.mvc.Result;
 import service.BrandService;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 
 public class BrandController extends Controller {
 
+    // получения исполнителя для текущего контекста HTTP
+    private final HttpExecutionContext httpExecutionContext;
+
+    private final BrandService brandService;
+
     @Inject
-    private BrandService brandService;
+    public BrandController(HttpExecutionContext httpExecutionContext, BrandService brandService) {
+        this.httpExecutionContext = httpExecutionContext;
+        this.brandService = brandService;
+    }
 
-    public Result create(Http.Request request) {
+    public CompletionStage<Result> create(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
             String name = json.get("name").asText().toLowerCase();
             String country = json.get("country").asText().toLowerCase();
-            brandService.create(name, country);
-            return ok(  "CREATE OK");
+            return brandService.create(name, country)
+                    .thenApplyAsync(brand -> ok(brand), httpExecutionContext.current());
         }
-        return ok("NO CREATE");
+        return CompletableFuture.completedFuture(badRequest("Was NOT created record into Brand"));
     }
 
-    public Result show(String name) {
-        return ok(Json.toJson(brandService.show(name.toLowerCase())));
+    public CompletionStage<Result> show(String name) {
+        return brandService.show(name.toLowerCase())
+                .thenApplyAsync(brand -> ok(Json.toJson(brand)), httpExecutionContext.current());
     }
 
-    public Result all() {
-        List<BrandDto> result = brandService.all();
-        return ok(Json.toJson(result));
+    public CompletionStage<Result> all() {
+        return brandService.all().thenApplyAsync(brandDtos -> ok(Json.toJson(brandDtos)), httpExecutionContext.current());
     }
 
-    public Result update(Http.Request request) {
+    public CompletionStage<Result> update(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
             String name = json.get("name").asText().toLowerCase();
             String country = json.get("country").asText().toLowerCase();
-            brandService.update(name, country);
-            return ok(  "UPDATE OK");
+            return brandService.update(name, country)
+                    .thenApplyAsync(brand -> ok(brand), httpExecutionContext.current());
         }
-        return ok("NO");
+        return CompletableFuture.completedFuture(badRequest("Was NOT updated record into Brand"));
     }
 
-    public Result delete(String name) {
-        brandService.delete(name.toLowerCase());
-        return ok("DELETE OK");
+    public CompletionStage<Result> delete(String name) {
+        return brandService.delete(name.toLowerCase())
+                .thenApplyAsync(brand -> ok(brand), httpExecutionContext.current());
     }
 
-
-
-//    @Transactional
-//    public Result all() {
-//        Source<ByteString,NotUsed> brands = Source.from(
-//                brandService.all()
-//        ).fold(ByteString.emptyByteString(),
-//            (userByteStringJsonConcatenation, nextBrand) -> userByteStringJsonConcatenation.isEmpty() ?
-//                    //First user json
-//                    ByteString.fromString(Json.toJson(nextBrand).toString()) :
-//                    userByteStringJsonConcatenation.concat(
-//                            //Every concatenation has to be separated by comma
-//                            ByteString.fromString(", " + Json.toJson(nextBrand).toString())
-//                    )
-//            ).intersperse(
-//                    //Close the concatenation with parentheses to indicate an array of json
-//                    ByteString.fromString("["), ByteString.emptyByteString(), ByteString.fromString("]")
-//            );
-//        return ok().chunked(brands);
-//    }
 
 
 }

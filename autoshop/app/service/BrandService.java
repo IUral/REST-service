@@ -4,34 +4,48 @@ import models.dao.BrandDao;
 import models.dto.BrandDto;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 
 public class BrandService {
 
+    private final DatabaseExecutionContext databaseExecutionContext;
+
     private final BrandDao brandDao;
 
     @Inject
-    public BrandService(BrandDao brandDao) {
+    public BrandService(DatabaseExecutionContext databaseExecutionContext, BrandDao brandDao) {
+        this.databaseExecutionContext = databaseExecutionContext;
         this.brandDao = brandDao;
     }
 
-    public void create(String name, String country) {
-        brandDao.create(name, country);
+    public CompletionStage<String> create(String name, String country) {
+        return CompletableFuture.supplyAsync(() -> {
+            brandDao.create(name, country);
+            return "Was created Brand";
+        }, databaseExecutionContext);
     }
 
-    public BrandDto show(String name) {
-        return brandDao.show(name);
+    public CompletionStage<BrandDto> show(String name) {
+        return CompletableFuture.supplyAsync(() -> brandDao.show(name), databaseExecutionContext);
     }
 
-    public List<BrandDto> all() {
-        return brandDao.all();
+    public CompletionStage<List<BrandDto>> all() {
+        return CompletableFuture.supplyAsync(() -> brandDao.all(), databaseExecutionContext);
     }
 
-    public void update(String name, String country) {
-        brandDao.update(name, country);
+    public CompletionStage<String> update(String name, String country) {
+        return CompletableFuture.supplyAsync(() -> {
+            brandDao.update(name, country);
+            return "Was update record Brand";
+        }, databaseExecutionContext);
     }
 
-    public void delete(String name) {
-        brandDao.delete(name);
+    public CompletionStage<String> delete(String name) {
+        return CompletableFuture.supplyAsync(() -> {
+            brandDao.delete(name);
+            return "Was delete record Brand";
+        }, databaseExecutionContext);
     }
 }

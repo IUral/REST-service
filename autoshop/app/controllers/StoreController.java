@@ -1,23 +1,32 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.concurrent.HttpExecutionContext;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import service.StoreService;
-import models.dto.StoreDto;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 
 public class StoreController extends Controller {
 
-    @Inject
-    private StoreService storeService;
+    // получения исполнителя для текущего контекста HTTP
+    private final HttpExecutionContext httpExecutionContext;
 
-    public Result create(Http.Request request) {
+    private final StoreService storeService;
+
+    @Inject
+    public StoreController(StoreService storeService, HttpExecutionContext httpExecutionContext) {
+        this.storeService = storeService;
+        this.httpExecutionContext = httpExecutionContext;
+    }
+
+    public CompletionStage<Result> create(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
             String brandName = json.get("brand_name").asText().toLowerCase();
@@ -25,23 +34,23 @@ public class StoreController extends Controller {
             Integer yearCreated = Integer.parseInt(json.get("year_created").asText());
             Integer milage = Integer.parseInt(json.get("milage").asText());
             Integer price = Integer.parseInt(json.get("price").asText());
-            storeService.create(brandName, modelName, yearCreated, milage, price);
-            return ok(  "CREATE Model OK");
+            return storeService.create(brandName, modelName, yearCreated, milage, price)
+                    .thenApplyAsync(store -> ok(store), httpExecutionContext.current());
         }
-        return badRequest("Oopsss! record was not created ");
+        return CompletableFuture.completedFuture(badRequest("Was NOT created record into Store"));
     }
 
-    public Result show(String country) {
-        List<StoreDto> result = storeService.show(country.toLowerCase());
-        return ok(Json.toJson(result));
+    public CompletionStage<Result> show(String country) {
+        return storeService.show(country.toLowerCase())
+                .thenApplyAsync(store -> ok(Json.toJson(store)), httpExecutionContext.current());
     }
 
-    public Result all() {
-        List<StoreDto> result = storeService.all();
-        return ok(Json.toJson(result));
+    public CompletionStage<Result> all() {
+        return storeService.all()
+                .thenApplyAsync(store -> ok(Json.toJson(store)), httpExecutionContext.current());
     }
 
-    public Result update(Http.Request request) {
+    public CompletionStage<Result> update(Http.Request request) {
         JsonNode json = request.body().asJson();
         if(json != null) {
             Integer id = json.get("id").asInt();
@@ -50,15 +59,15 @@ public class StoreController extends Controller {
             Integer yearCreated = Integer.parseInt(json.get("year_created").asText());
             Integer milage = Integer.parseInt(json.get("milage").asText());
             Integer price = Integer.parseInt(json.get("price").asText());
-            storeService.update(id, brandName, modelName, yearCreated, milage, price);
-            return ok(  "UPDATE Model - OK");
+            return storeService.update(id, brandName, modelName, yearCreated, milage, price)
+                    .thenApplyAsync(store -> ok(store), httpExecutionContext.current());
         }
-        return ok("NO");
+        return CompletableFuture.completedFuture(badRequest("Was NOT updated record into Store"));
     }
 
-    public Result delete(String name) {
-        storeService.delete(name.toLowerCase());
-        return ok("DELETE Model - OK");
+    public CompletionStage<Result> delete(String name) {
+        return storeService.delete(name.toLowerCase())
+                .thenApplyAsync(store -> ok(store), httpExecutionContext.current());
     }
 
 }
